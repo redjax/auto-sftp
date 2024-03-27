@@ -102,141 +102,38 @@ if __name__ == "__main__":
     log.debug(
         f"Public key [exists:{ssh_settings.pubkey_exists}]: {ssh_settings.pubkey}"
     )
-
     log.debug(
         f"Local destination [exists:{ssh_settings.local_dest_exists}]: {ssh_settings.local_dest}"
     )
 
-    # log.info(f"Getting SSHClient")
-    # ssh_client: paramiko.SSHClient = paramiko.SSHClient()
-    # ssh_client.load_system_host_keys()
-    # ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-
-    # log.info("Loading private key")
-    # ## Get SSH key
-    # try:
-    #     _privkey: paramiko.RSAKey = paramiko.RSAKey.from_private_key_file(
-    #         filename=f"{ssh_settings.privkey}"
-    #     )
-    # except paramiko.SSHException as ssh_exc:
-    #     msg = Exception(
-    #         f"Unhandled exception loading SSH private key. Details: {ssh_exc}"
-    #     )
-    #     log.error(msg)
-
-    #     raise ssh_exc
-    # except Exception as exc:
-    #     msg = Exception(f"Unhandled exception loading SSH private key. Details: {exc}")
-    #     log.error(msg)
-
-    #     raise msg
-
-    # try:
-    #     ssh_mod.upload_ssh_key(
-    #         privkey_path=ssh_settings.privkey,
-    #         remote_host=ssh_settings.remote_host,
-    #         remote_user=ssh_settings.remote_user,
-    #     )
-    # except Exception as exc:
-    #     msg = Exception(f"Unhandledd exception uploading SSH key. Details:  {exc}")
-    #     log.error(msg)
-
-    #     raise msg
-
-    # log.info("Attempting connection")
-    # try:
-    #     ssh_client.connect(
-    #         hostname=ssh_settings.remote_host,
-    #         username=ssh_settings.remote_user,
-    #         port=ssh_settings.remote_port,
-    #         password=ssh_settings.remote_password,
-    #         key_filename=f"{ssh_settings.privkey}",
-    #         timeout=5000,
-    #     )
-    #     log.success(
-    #         f"Connected to {ssh_settings.remote_user}@{ssh_settings.remote_host}:{ssh_settings.remote_port}"
-    #     )
-    # except Exception as exc:
-    #     msg = Exception(
-    #         f"Unhandled exception connecting to remote host {ssh_settings.remote_user}@{ssh_settings.remote_host}:{ssh_settings.remote_port}. Details: {exc}"
-    #     )
-    #     log.error(f"({type(exc)}) {msg}")
-
-    #     raise exc
-
-    # log.info("Getting SFTP client")
-    # try:
-    #     sftp = ssh_client.open_sftp()
-    #     log.success(f"SFTP connected")
-    # except Exception as exc:
-    #     msg = Exception(f"Unhandled exception getting SFTP client. Details: {exc}")
-    #     log.error(msg)
-
-    #     raise msg
-
-    # log.info(
-    #     f"Copying 'example' file to remote path '/home/jack/example_from_colossus'."
-    # )
-    # try:
-    #     sftp.put(Path("example"), "/home/jack/example_from_colossus")
-    # except Exception as exc:
-    #     msg = Exception(f"Unhandled exception copying file to remote. Details: {exc}")
-    #     log.error(msg)
-
-    #     raise exc
-
-    # log.info(
-    #     f"Downloading file '/home/jack/example_from_colossus' to ./example_response"
-    # )
-    # try:
-    #     sftp.get("/home/jack/example_from_colossus", "./example_response")
-    #     log.success(
-    #         f"Pulled file '/home/jack/example_from_colossus' from remote {ssh_settings.remote_user}@{ssh_settings.remote_host}:{ssh_settings.remote_port} to ./example_response"
-    #     )
-    # except Exception as exc:
-    #     msg = Exception(f"Unhandled exception pulling file from remote. Details: {exc}")
-    #     log.error(msg)
-
-    #     raise exc
-
-    # with ssh_mod.get_ssh_client(ssh_settings=ssh_settings) as ssh_client:
-    #     with ssh_mod.get_sftp_client(ssh_client=ssh_client) as sftp:
-
-    #         try:
-    #             sftp.remove("/home/jack/example_from_colossus")
-    #             log.success(
-    #                 f"Removed file/home/jack/example_from_colossus from remote {ssh_settings.remote_host}"
-    #             )
-    #         except FileNotFoundError as fnf:
-    #             msg = Exception(
-    #                 f"Could not find file /home/jack/example_from_colossus on remote {ssh_settings.remote_host}"
-    #             )
-    #             log.warning(f"{msg}")
-
-    #         except Exception as exc:
-    #             msg = Exception(
-    #                 f"Unhandled exception removing file /home/jack/example_from_colossus from remote {ssh_settings.remote_host}. Details: {exc}"
-    #             )
-    #             log.error(msg)
-
-    #             raise exc
-
     with ssh_mod.get_sftp_client(ssh_settings=ssh_settings) as sftp:
-        try:
-            sftp.remove("/home/jack/example_from_colossus")
-            log.success(
-                f"Removed file/home/jack/example_from_colossus from remote {ssh_settings.remote_host}"
-            )
-        except FileNotFoundError as fnf:
-            msg = Exception(
-                f"Could not find file /home/jack/example_from_colossus on remote {ssh_settings.remote_host}"
-            )
-            log.warning(f"{msg}")
+        # try:
+        #     sftp.remove("/home/jack/example_from_colossus")
+        #     log.success(
+        #         f"Removed file/home/jack/example_from_colossus from remote {ssh_settings.remote_host}"
+        #     )
+        # except FileNotFoundError as fnf:
+        #     msg = Exception(
+        #         f"Could not find file /home/jack/example_from_colossus on remote {ssh_settings.remote_host}"
+        #     )
+        #     log.warning(f"{msg}")
 
-        except Exception as exc:
-            msg = Exception(
-                f"Unhandled exception removing file /home/jack/example_from_colossus from remote {ssh_settings.remote_host}. Details: {exc}"
+        # except Exception as exc:
+        #     msg = Exception(
+        #         f"Unhandled exception removing file /home/jack/example_from_colossus from remote {ssh_settings.remote_host}. Details: {exc}"
+        #     )
+        #     log.error(msg)
+
+        #     raise exc
+
+        try:
+            ssh_mod.sftp_download_all(
+                sftp_client=sftp,
+                remote_src=f"{ssh_settings.remote_cwd}/docker/paperless-ngx",
+                local_dest=ssh_settings.local_dest,
             )
+        except Exception as exc:
+            msg = Exception(f"Unhandled exception downloading files. Details: {exc}")
             log.error(msg)
 
             raise exc

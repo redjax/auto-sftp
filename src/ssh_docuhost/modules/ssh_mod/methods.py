@@ -129,11 +129,10 @@ def get_sftp_client(
     ssh_settings: SSHSettings | None = None,
     ssh_client: paramiko.SSHClient | None = None,
 ) -> t.Generator[paramiko.SFTPClient, t.Any, None]:
-    assert ssh_settings or ssh_client, ValueError(
-        "Must pass an SSHSettings object, or an initialized Paramiko SSHClient."
-    )
-
-    if ssh_settings:
+    if not ssh_client:
+        assert ssh_settings, ValueError(
+            "No ssh_client was passed, and ssh_settings is None. If you are not passing an initialized paramiko.SSHClient, you must pass an SSHSettings object."
+        )
         assert isinstance(ssh_settings, SSHSettings), TypeError(
             f"ssh_settings must be of type SSHSettings. Got type: ({type(ssh_settings)})"
         )
@@ -184,3 +183,67 @@ def get_sftp_client(
             raise exc
         finally:
             sftp_client.close()
+
+
+def sftp_download_all(
+    sftp_client: paramiko.SFTPClient | None = None,
+    ssh_client: paramiko.SSHClient | None = None,
+    remote_src: t.Union[str, Path] = None,
+    local_dest: t.Union[str, Path] = None,
+):
+    """Download all files from a remote src directory to a local destination."""
+    if not sftp_client:
+        assert ssh_client, ValueError(
+            "No paramiko.SFTPClient was passed, and ssh_client is None. If you are not passing an initialized paramiko.SFTPClient, you need to provide an initialized paramiko.SSHClient."
+        )
+        assert isinstance(ssh_client, paramiko.SSHClient), TypeError(
+            f"ssh_client should be of type paramiko.SSHClient. Got type: ({type(ssh_client)})"
+        )
+    else:
+        assert isinstance(sftp_client, paramiko.SFTPClient), TypeError(
+            f"sftp_client should be of type paramiko.SFTPClient. Got type: ({type(sftp_client)})"
+        )
+
+    assert remote_src, ValueError("Missing a remote source directory")
+    assert isinstance(remote_src, str) or isinstance(remote_src, Path), TypeError(
+        f"remote_src should be a string or Path. Got type: ({type(remote_src)})"
+    )
+    if isinstance(remote_src, Path):
+        remote_src: str = f"{remote_src}"
+
+    assert local_dest, ValueError("Missing a local destination directory")
+    assert isinstance(local_dest, str) or isinstance(local_dest, Path), TypeError(
+        f"local_dest"
+    )
+    if isinstance(local_dest, Path):
+        if "~" in f"{local_dest}":
+            local_dest: Path = Path(f"{local_dest}").expanduser()
+    elif isinstance(local_dest, str):
+        if "~" in local_dest:
+            local_dest: Path = Path(local_dest).expanduser()
+        else:
+            local_dest: Path = Path(local_dest)
+
+    if not sftp_client:
+        with get_sftp_client(ssh_client=ssh_client) as sftp:
+            remote_files = sftp.listdir(remote_src)
+            if remote_files:
+                log.debug(
+                    f"Found [{len(remote_files)}] file(s) in remote path '{remote_src}'"
+                )
+                log.debug(f"First 5 files:")
+                for f in remote_files[0:5]:
+                    log.debug(f)
+    else:
+        remote_files = sftp_client.listdir(remote_src)
+        if remote_files:
+            log.debug(
+                f"Found [{len(remote_files)}] file(s) in remote path '{remote_src}'"
+            )
+            log.debug(f"First 5 files:")
+            for f in remote_files[0:5]:
+                log.debug(f)
+
+        # raise NotImplementedError(
+        #     f"An SFTP client was opened, but SFTP functionality is not yet implemented."
+        # )
