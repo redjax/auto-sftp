@@ -25,3 +25,7 @@ if __name__ == "__main__":
     log.debug(
         f"Public key [exists:{ssh_settings.pubkey_exists}]: {ssh_settings.pubkey}"
     )
+
+    log.debug(
+        f"Local destination [exists:{ssh_settings.local_dest_exists}]: {ssh_settings.local_dest}"
+    )

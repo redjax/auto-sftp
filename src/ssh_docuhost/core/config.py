@@ -45,6 +45,24 @@ class AppSettings(BaseSettings):
 
 
 class SSHSettings(BaseSettings):
+    remote_host: str = Field(
+        default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_HOST, env="SSH_REMOTE_HOST"
+    )
+    remote_user: str = Field(default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_USER)
+    remote_password: str | None = Field(
+        default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_PASSWORD, env="SSH_REMOTE_PASSWORD"
+    )
+    remote_cwd: str = Field(
+        default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_CWD, env="SSH_REMOTE_CWD"
+    )
+    remote_port: int = Field(
+        default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_SSH_PORT, env="SSH_REMOTE_SSH_PORT"
+    )
+
+    local_dest: t.Union[str, Path] = Field(
+        default=DYNACONF_SSH_SETTINGS.SSH_LOCAL_DEST_PATH, env="SSH_LOCAL_DEST_PATH"
+    )
+
     privkey: t.Union[str, Path] = Field(
         default=DYNACONF_SSH_SETTINGS.SSH_PRIVKEY_FILE, env="SSH_PRIVKEY_FILE"
     )
@@ -84,6 +102,22 @@ class SSHSettings(BaseSettings):
 
         raise ValidationError
 
+    @field_validator("local_dest")
+    def validate_local_dest(cls, v) -> Path:
+        if isinstance(v, Path):
+            if "~" in f"{v}":
+                return v.expanduser()
+            else:
+                return v
+
+        if isinstance(v, str):
+            if "~" in v:
+                return Path(v).expanduser()
+            else:
+                return Path(v)
+
+        raise ValidationError
+
     @property
     def privkey_exists(self) -> bool:
         return self.privkey.exists()
@@ -91,6 +125,10 @@ class SSHSettings(BaseSettings):
     @property
     def pubkey_exists(self) -> bool:
         return self.pubkey.exists()
+
+    @property
+    def local_dest_exists(self) -> bool:
+        return self.local_dest.exists()
 
 
 ## Uncomment if you're configuring a database for the app
