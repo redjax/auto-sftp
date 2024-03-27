@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:3f2e9975656869f3b0aa53c1c74b9f6e015be5648d50f704e57206435fc9e1cb"
+content_hash = "sha256:29e3665fd96413d1c2ea4c0209ab546224538e1fcd7426046dbb9db776fa0fe2"
 
 [[package]]
 name = "annotated-types"
@@ -918,6 +918,19 @@ files = [
     {file = "ruff-0.3.4-py3-none-win_amd64.whl", hash = "sha256:de0d5069b165e5a32b3c6ffbb81c350b1e3d3483347196ffdf86dc0ef9e37dd6"},
     {file = "ruff-0.3.4-py3-none-win_arm64.whl", hash = "sha256:6810563cc08ad0096b57c717bd78aeac888a1bfd38654d9113cb3dc4d3f74232"},
     {file = "ruff-0.3.4.tar.gz", hash = "sha256:f0f4484c6541a99862b693e13a151435a279b271cff20e37101116a21e2a1ad1"},
+]
+
+[[package]]
+name = "scp"
+version = "0.14.5"
+summary = "scp module for paramiko"
+groups = ["default"]
+dependencies = [
+    "paramiko",
+]
+files = [
+    {file = "scp-0.14.5-py2.py3-none-any.whl", hash = "sha256:d224535dd8ed00294f52b0e0e18fde7a6fb7a3d06b97ede9e3f750fa7bf75c09"},
+    {file = "scp-0.14.5.tar.gz", hash = "sha256:64f0015899b3d212cb8088e7d40ebaf0686889ff0e243d5c1242efe8b50f053e"},
 ]
 
 [[package]]
