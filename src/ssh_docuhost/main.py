@@ -106,34 +106,51 @@ if __name__ == "__main__":
         f"Local destination [exists:{ssh_settings.local_dest_exists}]: {ssh_settings.local_dest}"
     )
 
-    with ssh_mod.get_sftp_client(ssh_settings=ssh_settings) as sftp:
-        # try:
-        #     sftp.remove("/home/jack/example_from_colossus")
-        #     log.success(
-        #         f"Removed file/home/jack/example_from_colossus from remote {ssh_settings.remote_host}"
-        #     )
-        # except FileNotFoundError as fnf:
-        #     msg = Exception(
-        #         f"Could not find file /home/jack/example_from_colossus on remote {ssh_settings.remote_host}"
-        #     )
-        #     log.warning(f"{msg}")
+    ## Using ssh_client
+    # with ssh_mod.get_ssh_client(ssh_settings=ssh_settings) as ssh_client:
+    #     try:
+    #         ssh_mod.sftp_download_all(
+    #             ssh_client=ssh_client,
+    #             remote_src=f"{ssh_settings.remote_cwd}/docker/paperless-ngx",
+    #             local_dest=ssh_settings.local_dest,
+    #         )
+    #     except Exception as exc:
+    #         msg = Exception(f"Unhandled exception downloading files. Details: {exc}")
+    #         log.error(msg)
 
-        # except Exception as exc:
-        #     msg = Exception(
-        #         f"Unhandled exception removing file /home/jack/example_from_colossus from remote {ssh_settings.remote_host}. Details: {exc}"
-        #     )
-        #     log.error(msg)
+    #         raise exc
 
-        #     raise exc
+    # with ssh_mod.get_sftp_client(ssh_settings=ssh_settings) as sftp:
+    # try:
+    #     sftp.remove("/home/jack/example_from_colossus")
+    #     log.success(
+    #         f"Removed file/home/jack/example_from_colossus from remote {ssh_settings.remote_host}"
+    #     )
+    # except FileNotFoundError as fnf:
+    #     msg = Exception(
+    #         f"Could not find file /home/jack/example_from_colossus on remote {ssh_settings.remote_host}"
+    #     )
+    #     log.warning(f"{msg}")
 
-        try:
-            ssh_mod.sftp_download_all(
-                sftp_client=sftp,
-                remote_src=f"{ssh_settings.remote_cwd}/docker/paperless-ngx",
-                local_dest=ssh_settings.local_dest,
-            )
-        except Exception as exc:
-            msg = Exception(f"Unhandled exception downloading files. Details: {exc}")
-            log.error(msg)
+    # except Exception as exc:
+    #     msg = Exception(
+    #         f"Unhandled exception removing file /home/jack/example_from_colossus from remote {ssh_settings.remote_host}. Details: {exc}"
+    #     )
+    #     log.error(msg)
 
-            raise exc
+    #     raise exc
+
+    ## With sftp_client
+    # with ssh_mod.get_sftp_client(ssh_settings=ssh_settings) as sftp:
+
+    #     try:
+    #         ssh_mod.sftp_download_all(
+    #             sftp_client=sftp,
+    #             remote_src=f"{ssh_settings.remote_cwd}/docker/paperless-ngx",
+    #             local_dest=ssh_settings.local_dest,
+    #         )
+    #     except Exception as exc:
+    #         msg = Exception(f"Unhandled exception downloading files. Details: {exc}")
+    #         log.error(msg)
+
+    #         raise exc
