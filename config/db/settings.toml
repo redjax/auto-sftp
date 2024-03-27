@@ -1,0 +1,35 @@
+[default]
+
+db_type = "sqlite"
+db_drivername = "sqlite+pysqlite"
+db_username = ""
+# Set in .secrets.toml
+# db_password = ""
+db_host = ""
+db_port = ""
+db_database = ".data/app.sqlite"
+db_echo = false
+
+[dev]
+
+db_type = "sqlite"
+db_drivername = "sqlite+pysqlite"
+db_username = ""
+# Set in .secrets.toml
+# db_password = ""
+db_host = ""
+db_port = ""
+db_database = ".data/app-dev.sqlite"
+db_echo = true
+
+[prod]
+
+db_type = "sqlite"
+db_drivername = "sqlite+pysqlite"
+db_username = ""
+# Set in .secrets.toml
+# db_password = ""
+db_host = ""
+db_port = ""
+db_database = ".data/app.sqlite"
+db_echo = false
