@@ -8,7 +8,13 @@ from loguru import logger as log
 from red_utils.ext.loguru_utils import init_logger, sinks
 
 if __name__ == "__main__":
-    init_logger(sinks=[sinks.LoguruSinkStdErr(level=settings.log_level).as_dict()])
+    init_logger(
+        sinks=[
+            sinks.LoguruSinkStdErr(level=settings.log_level).as_dict(),
+            sinks.LoguruSinkAppFile(sink=f"{settings.logs_dir}/app.log").as_dict(),
+            sinks.LoguruSinkErrFile(sink=f"{settings.logs_dir}/error.log").as_dict(),
+        ]
+    )
 
     log.info(
         f""">> Start Backup

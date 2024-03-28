@@ -18,6 +18,7 @@ class AppSettings(BaseSettings):
     env: str = Field(default="prod", env="ENV")
     container_env: bool = Field(default=False, env="CONTAINER_ENV")
     log_level: str = Field(default="INFO", env="LOG_LEVEL")
+    logs_dir: str = Field(default="logs", env="LOGS_DIR")
 
 
 class SSHSettings(BaseSettings):
