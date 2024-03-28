@@ -3,10 +3,12 @@
 env = "prod"
 container_env = false
 log_level = "INFO"
+logs_dir = "logs"
 
 [dev]
 
 env = "dev"
 log_level = "DEBUG"
+logs_dir = "logs/dev"
 
 [prod]

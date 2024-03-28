@@ -43,6 +43,7 @@ settings: AppSettings = AppSettings(
     env=DYNACONF_SETTINGS.ENV,
     container_env=DYNACONF_SETTINGS.CONTAINER_ENV,
     log_level=DYNACONF_SETTINGS.LOG_LEVEL,
+    logs_dir=DYNACONF_SETTINGS.LOGS_DIR,
 )
 ssh_settings: SSHSettings = SSHSettings(
     remote_host=DYNACONF_SSH_SETTINGS.SSH_REMOTE_HOST,
