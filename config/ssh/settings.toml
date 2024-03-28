@@ -2,7 +2,7 @@
 
 ssh_remote_host = ""
 ssh_remote_user = ""
-ssh_remote_ssh_port = 22
+ssh_remote_port = 22
 ssh_remote_cwd = ""
 
 ssh_local_dest_path = ""
@@ -14,7 +14,7 @@ ssh_extra_path_suffix = ""
 
 ssh_remote_host = ""
 ssh_remote_user = ""
-ssh_remote_ssh_port = 22
+ssh_remote_port = 22
 ssh_remote_cwd = ""
 
 ssh_local_dest_path = ""
@@ -26,7 +26,7 @@ ssh_extra_path_suffix = ""
 
 ssh_remote_host = ""
 ssh_remote_user = ""
-ssh_remote_ssh_port = 22
+ssh_remote_port = 22
 ssh_remote_cwd = ""
 
 ssh_local_dest_path = ""

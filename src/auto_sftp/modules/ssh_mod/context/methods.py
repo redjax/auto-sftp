@@ -6,10 +6,11 @@ from pathlib import Path
 import sys
 import typing as t
 
-from core.config import SSHSettings, ssh_settings
+from core import SSHSettings, ssh_settings
 from core.helpers import get_host_os
 from loguru import logger as log
 import paramiko
+
 
 @contextmanager
 def get_ssh_client(

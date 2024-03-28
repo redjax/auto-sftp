@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 import typing as t
 
-from core.config import SSHSettings, settings, ssh_settings
+from core import SSHSettings, settings, ssh_settings
 from core.helpers import get_host_os
 from core.paths import DATA_DIR, ENSURE_DIRS
 from loguru import logger as log
@@ -14,6 +14,7 @@ from packages import sftp_backup
 from paramiko.channel import ChannelFile, ChannelStderrFile, ChannelStdinFile
 from red_utils.ext.loguru_utils import init_logger, sinks
 from red_utils.std import path_utils
+
 
 def run_backup(ssh_settings: t.Union[SSHSettings, dict] = None):
     assert ssh_settings, ValueError("Missing ssh_settings")

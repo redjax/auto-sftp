@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from auto_sftp.main import run_backup
 
-from core.config import settings, ssh_settings
+from core import settings, ssh_settings
 from core.paths import ENSURE_DIRS
 from loguru import logger as log
 from red_utils.ext.loguru_utils import init_logger, sinks
