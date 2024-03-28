@@ -85,6 +85,7 @@ def run_linter(session: nox.Session):
             print(f"Running ruff checks on '{d}' with --fix")
             session.run(
                 "ruff",
+                "check",
                 "--config",
                 "ruff.ci.toml",
                 lint_path,
