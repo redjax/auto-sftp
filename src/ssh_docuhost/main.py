@@ -50,15 +50,25 @@ if __name__ == "__main__":
         timeout=5000,
     ) as ssh_manager:
         try:
-            sftp = ssh_manager.get_sftp_client()
+            sftp: paramiko.SFTPClient = ssh_manager.get_sftp_client()
         except Exception as exc:
             msg = Exception(f"Unhandled exception getting SSH client. Details: {exc}")
             log.error(msg)
 
             raise exc
 
-        ssh_mod.sftp_download_all(
-            sftp_client=sftp,
+        files: list[str] = ssh_manager.sftp_list_files(
+            remote_path=f"{ssh_settings.remote_cwd}/docker/paperless-ngx"
+        )
+        log.debug(f"Files ({len(files)}): {files}")
+
+        ssh_manager.sftp_download_all(
             remote_src=f"{ssh_settings.remote_cwd}/docker/paperless-ngx",
             local_dest=ssh_settings.local_dest,
         )
+
+        # ssh_mod.sftp_download_all(
+        #     sftp_client=sftp,
+        #     remote_src=f"{ssh_settings.remote_cwd}/docker/paperless-ngx",
+        #     local_dest=ssh_settings.local_dest,
+        # )
