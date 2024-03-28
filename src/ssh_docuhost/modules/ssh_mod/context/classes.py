@@ -86,10 +86,10 @@ class SSHManager(AbstractContextManager):
         if self.ssh_client is None:
             raise ValueError("SSH client has not been initialized")
 
-        log.info("Getting SFTP client")
+        log.debug("Getting SFTP client")
         try:
             sftp_client = self.ssh_client.open_sftp()
-            log.success(f"SFTP session opened.")
+            log.debug(f"SFTP session opened.")
             return sftp_client
 
         except Exception as exc:
@@ -106,7 +106,7 @@ class SSHManager(AbstractContextManager):
             f"remote_path must be a string. Got type: ({type(remote_path)})"
         )
 
-        log.info(f"Listing files in '{remote_path}' on the remote machine.")
+        log.info(f"Listing files in '{remote_path}' on {self.host}")
         try:
             sftp: paramiko.SFTPClient = self.get_sftp_client()
         except Exception as exc:
@@ -159,9 +159,21 @@ class SSHManager(AbstractContextManager):
             msg = Exception(f"SSH client is None.")
 
             return
+
         else:
             sftp_client: paramiko.SFTPClient = self.get_sftp_client()
-            remote_files = sftp_client.listdir(remote_src)
+
+            try:
+                # remote_files = sftp_client.listdir(remote_src)
+                remote_files = self.sftp_list_files(remote_path=remote_src)
+            except Exception as exc:
+                msg = Exception(
+                    f"Unhandled exception getting list of files from remote path '{remote_src}'. Details: {exc}"
+                )
+                log.error(msg)
+
+                raise exc
+
             if remote_files:
                 log.debug(
                     f"Found [{len(remote_files)}] file(s) in remote path '{remote_src}'"
@@ -178,6 +190,9 @@ class SSHManager(AbstractContextManager):
                         continue
 
                     if not local_dest.exists():
+                        log.info(
+                            f"Downloading file from '{_remote_path}' to '{_local_path}"
+                        )
                         try:
                             local_dest.mkdir(parents=True, exist_ok=True)
                         except PermissionError as perm_exc:
@@ -201,11 +216,11 @@ class SSHManager(AbstractContextManager):
 
                     try:
                         sftp_client.get(
-                            remotepath=f"{remote_src}/{f}", localpath=_local_path
+                            remotepath=f"{_remote_path}", localpath=_local_path
                         )
                     except Exception as exc:
                         msg = Exception(
-                            f"Unhandled exception downloading file '{f}' from remote. Details: {exc}"
+                            f"Unhandled exception downloading file '{_remote_path}' from remote. Details: {exc}"
                         )
                         log.error(msg)
 

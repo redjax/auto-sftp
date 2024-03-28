@@ -8,15 +8,55 @@ import typing as t
 from paramiko.channel import ChannelFile, ChannelStderrFile, ChannelStdinFile
 
 from core.helpers import get_host_os
-from core.config import settings, ssh_settings
+from core.config import settings, SSHSettings, ssh_settings
 from core.paths import DATA_DIR, ENSURE_DIRS
 from modules import ssh_mod
+from packages import sftp_backup
 
 from loguru import logger as log
 from red_utils.ext.loguru_utils import init_logger, sinks
 from red_utils.std import path_utils
 
-import paramiko
+
+def run_backup(ssh_settings: t.Union[SSHSettings, dict] = None):
+    assert ssh_settings, ValueError("Missing ssh_settings")
+    assert isinstance(ssh_settings, SSHSettings) or isinstance(
+        ssh_settings, dict
+    ), TypeError(
+        f"ssh_settings must be a dict or initialized SSHSettings object. Got type: ({type(ssh_settings)})"
+    )
+    if isinstance(ssh_settings, dict):
+        try:
+            ssh_settings: SSHSettings = SSHSettings.model_validate(ssh_settings)
+        except Exception as exc:
+            msg = Exception(
+                f"Unhandled exception initializing SSHSettings object from input dict. Details: {exc}"
+            )
+            log.error(msg)
+
+            raise exc
+
+    try:
+        _remote_dir = Path(f"{ssh_settings.remote_cwd}{ssh_settings.extra_path_suffix}")
+        _local_backup_path = Path(
+            f"{ssh_settings.local_dest}{ssh_settings.extra_path_suffix}"
+        )
+
+        sftp_backup.run_sftp_backup(
+            ssh_settings=ssh_settings,
+            remote_dir=f"{_remote_dir}".replace("\\", "/"),
+            local_backup_path=f"{_local_backup_path}".replace("\\", "/"),
+        )
+        log.success(f"Transferred backups to '{_local_backup_path}'")
+    except Exception as exc:
+        msg = Exception(f"Unhandled exception running SFTP backup. Details: {exc}")
+        log.error(msg)
+
+        raise exc
+
+
+def main(ssh_settings: SSHSettings = ssh_settings):
+    run_backup(ssh_settings=ssh_settings)
 
 
 if __name__ == "__main__":
@@ -41,34 +81,4 @@ if __name__ == "__main__":
         f"Local destination [exists:{ssh_settings.local_dest_exists}]: {ssh_settings.local_dest}"
     )
 
-    with ssh_mod.SSHManager(
-        host=ssh_settings.remote_host,
-        port=ssh_settings.remote_port,
-        user=ssh_settings.remote_user,
-        password=ssh_settings.remote_password,
-        ssh_keyfile=ssh_settings.privkey,
-        timeout=5000,
-    ) as ssh_manager:
-        try:
-            sftp: paramiko.SFTPClient = ssh_manager.get_sftp_client()
-        except Exception as exc:
-            msg = Exception(f"Unhandled exception getting SSH client. Details: {exc}")
-            log.error(msg)
-
-            raise exc
-
-        files: list[str] = ssh_manager.sftp_list_files(
-            remote_path=f"{ssh_settings.remote_cwd}/docker/paperless-ngx"
-        )
-        log.debug(f"Files ({len(files)}): {files}")
-
-        ssh_manager.sftp_download_all(
-            remote_src=f"{ssh_settings.remote_cwd}/docker/paperless-ngx",
-            local_dest=ssh_settings.local_dest,
-        )
-
-        # ssh_mod.sftp_download_all(
-        #     sftp_client=sftp,
-        #     remote_src=f"{ssh_settings.remote_cwd}/docker/paperless-ngx",
-        #     local_dest=ssh_settings.local_dest,
-        # )
+    main()

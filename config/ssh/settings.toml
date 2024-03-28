@@ -7,6 +7,9 @@ ssh_remote_cwd = ""
 
 ssh_local_dest_path = ""
 
+## Appended to the end of local & remote paths
+ssh_extra_path_suffix = ""
+
 [dev]
 
 ssh_remote_host = ""
@@ -16,6 +19,9 @@ ssh_remote_cwd = ""
 
 ssh_local_dest_path = ""
 
+## Appended to the end of local & remote paths
+ssh_extra_path_suffix = ""
+
 [prod]
 
 ssh_remote_host = ""
@@ -24,3 +30,6 @@ ssh_remote_ssh_port = 22
 ssh_remote_cwd = ""
 
 ssh_local_dest_path = ""
+
+## Appended to the end of local & remote paths
+ssh_extra_path_suffix = ""

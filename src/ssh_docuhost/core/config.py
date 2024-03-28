@@ -50,7 +50,9 @@ class SSHSettings(BaseSettings):
     )
     remote_user: str = Field(default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_USER)
     remote_password: str | None = Field(
-        default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_PASSWORD, env="SSH_REMOTE_PASSWORD"
+        default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_PASSWORD,
+        env="SSH_REMOTE_PASSWORD",
+        repr=False,
     )
     remote_cwd: str = Field(
         default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_CWD, env="SSH_REMOTE_CWD"
@@ -68,6 +70,9 @@ class SSHSettings(BaseSettings):
     )
     pubkey: t.Union[str, Path] = Field(
         default=DYNACONF_SSH_SETTINGS.SSH_PUBKEY_FILE, env="SSH_PUBKEY_FILE"
+    )
+    extra_path_suffix: str | None = Field(
+        default=DYNACONF_SSH_SETTINGS.SSH_EXTRA_PATH_SUFFIX, env="SSH_EXTRA_PATH_SUFFIX"
     )
 
     @field_validator("privkey")
