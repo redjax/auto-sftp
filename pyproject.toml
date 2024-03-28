@@ -1,7 +1,7 @@
 [project]
-name = "ssh-docuhost"
+name = "auto-sftp"
 version = "0.1.0"
-description = "Default template for PDM package"
+description = "Automate SFTP pulls with Paramiko."
 authors = [{ name = "redjax", email = "none@none.com" }]
 dependencies = [
     "pydantic>=2.6.4",
@@ -32,5 +32,5 @@ dev = ["black>=24.3.0", "ruff>=0.3.4", "pytest-xdist>=3.5.0", "nox>=2024.3.2"]
 
 [tool.pdm.scripts]
 
-start = { cmd = "python src/ssh_docuhost", env = { "ENV_FOR_DYNACONF" = "prod" } }
-start-dev = { cmd = "python src/ssh_docuhost", env = { "ENV_FOR_DYNACONF" = "dev" } }
+start = { cmd = "python src/auto_sftp", env = { "ENV_FOR_DYNACONF" = "prod" } }
+start-dev = { cmd = "python src/auto_sftp", env = { "ENV_FOR_DYNACONF" = "dev" } }

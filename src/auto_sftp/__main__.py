@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ssh_docuhost.main import run_backup
+from auto_sftp.main import run_backup
 
 from core.config import settings, ssh_settings
 from core.paths import ENSURE_DIRS
