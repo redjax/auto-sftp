@@ -1,13 +1,14 @@
-import typing as t
-from pathlib import Path
+from __future__ import annotations
+
 from os import system
+from pathlib import Path
+import typing as t
+
+from .context import SSHManager, get_sftp_client, get_ssh_client
 
 from core.helpers import get_host_os
-from .context import get_sftp_client, get_ssh_client, SSHManager
-
-import paramiko
 from loguru import logger as log
-
+import paramiko
 
 def upload_ssh_key(
     privkey_path: t.Union[str, Path] = None,

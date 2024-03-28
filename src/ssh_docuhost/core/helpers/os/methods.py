@@ -1,5 +1,6 @@
-import sys
+from __future__ import annotations
 
+import sys
 
 def get_host_os() -> str:
     VALID_PLATFORMS: list[str] = ["linux", "win32", "darwin"]

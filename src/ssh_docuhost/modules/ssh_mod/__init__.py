@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from .context import (
+    SSHManager,
     get_sftp_client,
     get_ssh_client,
 )
-from .context import SSHManager
-from .methods import get_ssh_client, get_sftp_client, upload_ssh_key, sftp_download_all
+from .methods import get_sftp_client, get_ssh_client, sftp_download_all, upload_ssh_key

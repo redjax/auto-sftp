@@ -1,6 +1,8 @@
+from __future__ import annotations
+
+from .classes import SSHManager
 from .methods import (
     get_host_os,
-    get_ssh_client,
     get_sftp_client,
+    get_ssh_client,
 )
-from .classes import SSHManager

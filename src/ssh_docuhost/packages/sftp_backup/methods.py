@@ -1,12 +1,12 @@
-import typing as t
+from __future__ import annotations
+
 from pathlib import Path
+import typing as t
 
-from core.config import ssh_settings, SSHSettings
-from modules import ssh_mod
-
-import paramiko
+from core.config import SSHSettings, ssh_settings
 from loguru import logger as log
-
+from modules import ssh_mod
+import paramiko
 
 def run_sftp_backup(
     ssh_settings: SSHSettings = None,

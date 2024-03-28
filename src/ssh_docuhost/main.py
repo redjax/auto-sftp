@@ -1,22 +1,19 @@
 from __future__ import annotations
 
+from os import system
 from pathlib import Path
 import sys
-from os import system
 import typing as t
 
-from paramiko.channel import ChannelFile, ChannelStderrFile, ChannelStdinFile
-
+from core.config import SSHSettings, settings, ssh_settings
 from core.helpers import get_host_os
-from core.config import settings, SSHSettings, ssh_settings
 from core.paths import DATA_DIR, ENSURE_DIRS
+from loguru import logger as log
 from modules import ssh_mod
 from packages import sftp_backup
-
-from loguru import logger as log
+from paramiko.channel import ChannelFile, ChannelStderrFile, ChannelStdinFile
 from red_utils.ext.loguru_utils import init_logger, sinks
 from red_utils.std import path_utils
-
 
 def run_backup(ssh_settings: t.Union[SSHSettings, dict] = None):
     assert ssh_settings, ValueError("Missing ssh_settings")

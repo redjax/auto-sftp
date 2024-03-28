@@ -1,15 +1,15 @@
-import typing as t
-from pathlib import Path
+from __future__ import annotations
+
 from contextlib import contextmanager
 from os import system
+from pathlib import Path
 import sys
+import typing as t
 
+from core.config import SSHSettings, ssh_settings
 from core.helpers import get_host_os
-from core.config import ssh_settings, SSHSettings
-
 from loguru import logger as log
 import paramiko
-
 
 @contextmanager
 def get_ssh_client(

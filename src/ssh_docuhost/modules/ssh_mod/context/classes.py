@@ -1,11 +1,11 @@
-import typing as t
-from pathlib import Path
-from contextlib import AbstractContextManager
+from __future__ import annotations
 
-import paramiko
+from contextlib import AbstractContextManager
+from pathlib import Path
+import typing as t
 
 from loguru import logger as log
-
+import paramiko
 
 class SSHManager(AbstractContextManager):
     def __init__(
