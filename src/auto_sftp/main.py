@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 import typing as t
 
-from core.config import SSHSettings, settings, ssh_settings
+from core import SSHSettings, settings, ssh_settings
 from core.helpers import get_host_os
 from core.paths import DATA_DIR, ENSURE_DIRS
 from loguru import logger as log

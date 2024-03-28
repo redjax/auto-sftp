@@ -14,6 +14,7 @@ dependencies = [
     "red-utils>=0.2.18",
     "loguru>=0.7.2",
     "scp>=0.14.5",
+    "rich>=13.7.1",
 ]
 requires-python = ">=3.11"
 readme = "README.md"
@@ -28,9 +29,17 @@ build-backend = "pdm.backend"
 distribution = true
 
 [tool.pdm.dev-dependencies]
-dev = ["black>=24.3.0", "ruff>=0.3.4", "pytest-xdist>=3.5.0", "nox>=2024.3.2"]
+dev = [
+    "black>=24.3.0",
+    "ruff>=0.3.4",
+    "pytest-xdist>=3.5.0",
+    "nox>=2024.3.2",
+    "pex>=2.0.3",
+]
 
 [tool.pdm.scripts]
 
 start = { cmd = "python src/auto_sftp", env = { "ENV_FOR_DYNACONF" = "prod" } }
 start-dev = { cmd = "python src/auto_sftp", env = { "ENV_FOR_DYNACONF" = "dev" } }
+
+build-pex = { cmd = "pex . -o dist/auto-sftp.pex -m main.main" }
