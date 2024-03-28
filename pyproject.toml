@@ -14,6 +14,7 @@ dependencies = [
     "red-utils>=0.2.18",
     "loguru>=0.7.2",
     "scp>=0.14.5",
+    "rich>=13.7.1",
 ]
 requires-python = ">=3.11"
 readme = "README.md"

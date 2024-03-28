@@ -4,8 +4,11 @@ from contextlib import AbstractContextManager
 from pathlib import Path
 import typing as t
 
+from core import helpers
+
 from loguru import logger as log
 import paramiko
+
 
 class SSHManager(AbstractContextManager):
     def __init__(
@@ -107,27 +110,30 @@ class SSHManager(AbstractContextManager):
         )
 
         log.info(f"Listing files in '{remote_path}' on {self.host}")
-        try:
-            sftp: paramiko.SFTPClient = self.get_sftp_client()
-        except Exception as exc:
-            msg = Exception(
-                f"Unhandled exception getting SFTP client while listing files. Details: {exc}"
-            )
-            log.error(msg)
+        with helpers.simple_spinner(
+            text=f"({self.user}@{self.host}) Listing files in '{remote_path}'..."
+        ):
+            try:
+                sftp: paramiko.SFTPClient = self.get_sftp_client()
+            except Exception as exc:
+                msg = Exception(
+                    f"Unhandled exception getting SFTP client while listing files. Details: {exc}"
+                )
+                log.error(msg)
 
-            raise exc
+                raise exc
 
-        try:
-            _files: list[str] = sftp.listdir(path=remote_path)
+            try:
+                _files: list[str] = sftp.listdir(path=remote_path)
 
-            return _files
-        except Exception as exc:
-            msg = Exception(
-                f"Unhandled exception listing files in remote path '{remote_path}'. Details: {exc}"
-            )
-            log.error(msg)
+                return _files
+            except Exception as exc:
+                msg = Exception(
+                    f"Unhandled exception listing files in remote path '{remote_path}'. Details: {exc}"
+                )
+                log.error(msg)
 
-            raise exc
+                raise exc
 
     def sftp_download_all(
         self,
@@ -178,50 +184,53 @@ class SSHManager(AbstractContextManager):
                 log.debug(
                     f"Found [{len(remote_files)}] file(s) in remote path '{remote_src}'"
                 )
+                with helpers.simple_spinner(
+                    text=f"({self.user}@{self.host}) Downloading [{len(remote_files)}] file(s) to '{local_dest}' ..."
+                ):
 
-                for f in remote_files:
-                    _local_path = Path(f"{local_dest}/{f}")
-                    _remote_path = f"{remote_src}/{f}"
+                    for f in remote_files:
+                        _local_path = Path(f"{local_dest}/{f}")
+                        _remote_path = f"{remote_src}/{f}"
 
-                    if _local_path.exists():
-                        log.warning(
-                            f"File '{f}' already exists at local path: {_local_path}. Skipping download."
-                        )
-                        continue
-
-                    if not local_dest.exists():
-                        log.info(
-                            f"Downloading file from '{_remote_path}' to '{_local_path}"
-                        )
-                        try:
-                            local_dest.mkdir(parents=True, exist_ok=True)
-                        except PermissionError as perm_exc:
-                            msg = Exception(
-                                f"Permission denied creating path '{local_dest}'. Details: {perm_exc}"
+                        if _local_path.exists():
+                            log.warning(
+                                f"File '{f}' already exists at local path: {_local_path}. Skipping download."
                             )
-                            log.error(msg)
+                            continue
 
-                            raise perm_exc
+                        if not local_dest.exists():
+                            log.info(
+                                f"Downloading file from '{_remote_path}' to '{_local_path}"
+                            )
+                            try:
+                                local_dest.mkdir(parents=True, exist_ok=True)
+                            except PermissionError as perm_exc:
+                                msg = Exception(
+                                    f"Permission denied creating path '{local_dest}'. Details: {perm_exc}"
+                                )
+                                log.error(msg)
+
+                                raise perm_exc
+                            except Exception as exc:
+                                msg = Exception(
+                                    f"Unhandled exception creating directory '{local_dest}'. Details: {exc}"
+                                )
+                                log.error(msg)
+
+                                raise exc
+
+                        log.info(
+                            f"Downloading file from remote: {f} to local path: {_local_path}"
+                        )
+
+                        try:
+                            sftp_client.get(
+                                remotepath=f"{_remote_path}", localpath=_local_path
+                            )
                         except Exception as exc:
                             msg = Exception(
-                                f"Unhandled exception creating directory '{local_dest}'. Details: {exc}"
+                                f"Unhandled exception downloading file '{_remote_path}' from remote. Details: {exc}"
                             )
                             log.error(msg)
 
                             raise exc
-
-                    log.info(
-                        f"Downloading file from remote: {f} to local path: {_local_path}"
-                    )
-
-                    try:
-                        sftp_client.get(
-                            remotepath=f"{_remote_path}", localpath=_local_path
-                        )
-                    except Exception as exc:
-                        msg = Exception(
-                            f"Unhandled exception downloading file '{_remote_path}' from remote. Details: {exc}"
-                        )
-                        log.error(msg)
-
-                        raise exc

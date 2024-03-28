@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
-        "./src/ssh_docuhost"
+        "./src/ssh_docuhost",
+        "./src/auto_sftp"
     ]
 }
