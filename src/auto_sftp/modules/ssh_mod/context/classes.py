@@ -8,6 +8,7 @@ from core import helpers
 from loguru import logger as log
 import paramiko
 
+
 class SSHManager(AbstractContextManager):
     def __init__(
         self,
@@ -109,7 +110,7 @@ class SSHManager(AbstractContextManager):
 
         log.info(f"Listing files in '{remote_path}' on {self.host}")
         with helpers.simple_spinner(
-            text=f"({self.user}@{self.host}) Listing files in '{remote_path}'..."
+            text=f"({self.user}@{self.host}) Listing files in '{remote_path}'...\n"
         ):
             try:
                 sftp: paramiko.SFTPClient = self.get_sftp_client()
@@ -183,8 +184,11 @@ class SSHManager(AbstractContextManager):
                     f"Found [{len(remote_files)}] file(s) in remote path '{remote_src}'"
                 )
                 with helpers.simple_spinner(
-                    text=f"({self.user}@{self.host}) Downloading [{len(remote_files)}] file(s) to '{local_dest}' ..."
+                    text=f"({self.user}@{self.host}) Downloading [{len(remote_files)}] file(s) to '{local_dest}' ...\n"
                 ):
+
+                    loop_count: int = 1
+                    max_loops = len(remote_files)
 
                     for f in remote_files:
                         _local_path = Path(f"{local_dest}/{f}")
@@ -218,13 +222,15 @@ class SSHManager(AbstractContextManager):
                                 raise exc
 
                         log.info(
-                            f"Downloading file from remote: {f} to local path: {_local_path}"
+                            f"[{loop_count}/{max_loops}] Downloading file from remote: {f} to local path: {_local_path}"
                         )
 
                         try:
                             sftp_client.get(
                                 remotepath=f"{_remote_path}", localpath=_local_path
                             )
+
+                            loop_count += 1
                         except Exception as exc:
                             msg = Exception(
                                 f"Unhandled exception downloading file '{_remote_path}' from remote. Details: {exc}"
