@@ -13,128 +13,6 @@ from pydantic_settings import BaseSettings
 # import sqlalchemy as sa
 # import sqlalchemy.orm as so
 
-# DYNACONF_SETTINGS: Dynaconf = Dynaconf(
-#     environments=True,
-#     envvar_prefix="DYNACONF",
-#     settings_files=["settings.toml", ".secrets.toml"],
-# )
-
-## Uncomment if adding a database config
-# valid_db_types: list[str] = ["sqlite", "postgres", "mssql"]
-
-## Uncomment to load database settings from environment
-# DYNACONF_DB_SETTINGS: Dynaconf = Dynaconf(
-#     environments=True,
-#     envvar_prefix="DB",
-#     settings_files=["db/settings.toml", "db/.secrets.toml"],
-# )
-
-# DYNACONF_SSH_SETTINGS: Dynaconf = Dynaconf(
-#     environments=True,
-#     envvar_prefix="SSH",
-#     settings_files=["ssh/settings.toml", "ssh/.secrets.toml"],
-# )
-
-
-# class AppSettings(BaseSettings):
-#     env: str = Field(default=DYNACONF_SETTINGS.ENV, env="ENV")
-#     container_env: bool = Field(
-#         default=DYNACONF_SETTINGS.CONTAINER_ENV, env="CONTAINER_ENV"
-#     )
-#     log_level: str = Field(default=DYNACONF_SETTINGS.LOG_LEVEL, env="LOG_LEVEL")
-
-
-# class SSHSettings(BaseSettings):
-#     remote_host: str = Field(
-#         default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_HOST, env="SSH_REMOTE_HOST"
-#     )
-#     remote_user: str = Field(default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_USER)
-#     remote_password: str | None = Field(
-#         default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_PASSWORD,
-#         env="SSH_REMOTE_PASSWORD",
-#         repr=False,
-#     )
-#     remote_cwd: str = Field(
-#         default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_CWD, env="SSH_REMOTE_CWD"
-#     )
-#     remote_port: int = Field(
-#         default=DYNACONF_SSH_SETTINGS.SSH_REMOTE_SSH_PORT, env="SSH_REMOTE_SSH_PORT"
-#     )
-
-#     local_dest: t.Union[str, Path] = Field(
-#         default=DYNACONF_SSH_SETTINGS.SSH_LOCAL_DEST_PATH, env="SSH_LOCAL_DEST_PATH"
-#     )
-
-#     privkey: t.Union[str, Path] = Field(
-#         default=DYNACONF_SSH_SETTINGS.SSH_PRIVKEY_FILE, env="SSH_PRIVKEY_FILE"
-#     )
-#     pubkey: t.Union[str, Path] = Field(
-#         default=DYNACONF_SSH_SETTINGS.SSH_PUBKEY_FILE, env="SSH_PUBKEY_FILE"
-#     )
-#     extra_path_suffix: str | None = Field(
-#         default=DYNACONF_SSH_SETTINGS.SSH_EXTRA_PATH_SUFFIX, env="SSH_EXTRA_PATH_SUFFIX"
-#     )
-
-#     @field_validator("privkey")
-#     def validate_privkey(cls, v) -> Path:
-#         if isinstance(v, Path):
-#             if "~" in f"{v}":
-#                 return v.expanduser()
-#             else:
-#                 return v
-
-#         if isinstance(v, str):
-#             if "~" in v:
-#                 return Path(v).expanduser()
-#             else:
-#                 return Path(v)
-
-#         raise ValidationError
-
-#     @field_validator("pubkey")
-#     def validate_pubkey(cls, v) -> Path:
-#         if isinstance(v, Path):
-#             if "~" in f"{v}":
-#                 return v.expanduser()
-#             else:
-#                 return v
-
-#         if isinstance(v, str):
-#             if "~" in v:
-#                 return Path(v).expanduser()
-#             else:
-#                 return Path(v)
-
-#         raise ValidationError
-
-#     @field_validator("local_dest")
-#     def validate_local_dest(cls, v) -> Path:
-#         if isinstance(v, Path):
-#             if "~" in f"{v}":
-#                 return v.expanduser()
-#             else:
-#                 return v
-
-#         if isinstance(v, str):
-#             if "~" in v:
-#                 return Path(v).expanduser()
-#             else:
-#                 return Path(v)
-
-#         raise ValidationError
-
-#     @property
-#     def privkey_exists(self) -> bool:
-#         return self.privkey.exists()
-
-#     @property
-#     def pubkey_exists(self) -> bool:
-#         return self.pubkey.exists()
-
-#     @property
-#     def local_dest_exists(self) -> bool:
-#         return self.local_dest.exists()
-
 
 class AppSettings(BaseSettings):
     env: str = Field(default="prod", env="ENV")
@@ -226,22 +104,22 @@ class SSHSettings(BaseSettings):
 
 ## Uncomment if you're configuring a database for the app
 # class DBSettings(BaseSettings):
-#     type: str = Field(default=DYNACONF_SETTINGS.DB_TYPE, env="DB_TYPE")
+#     type: str = Field(default=None, env="DB_TYPE")
 #     drivername: str = Field(
-#         default=DYNACONF_DB_SETTINGS.DB_DRIVERNAME, env="DB_DRIVERNAME"
+#         default=None, env="DB_DRIVERNAME"
 #     )
 #     user: str | None = Field(
-#         default=DYNACONF_DB_SETTINGS.DB_USERNAME, env="DB_USERNAME"
+#         default=None, env="DB_USERNAME"
 #     )
 #     password: str | None = Field(
-#         default=DYNACONF_DB_SETTINGS.DB_PASSWORD, env="DB_PASSWORD", repr=False
+#         default=None, env="DB_PASSWORD", repr=False
 #     )
-#     host: str | None = Field(default=DYNACONF_DB_SETTINGS.DB_HOST, env="DB_HOST")
+#     host: str | None = Field(default=None, env="DB_HOST")
 #     port: Union[str, int, None] = Field(
-#         default=DYNACONF_DB_SETTINGS.DB_PORT, env="DB_PORT"
+#         default=None, env="DB_PORT"
 #     )
-#     database: str = Field(default=DYNACONF_DB_SETTINGS.DB_DATABASE, env="DB_DATABASE")
-#     echo: bool = Field(default=DYNACONF_DB_SETTINGS.DB_ECHO, env="DB_ECHO")
+#     database: str = Field(default=None, env="DB_DATABASE")
+#     echo: bool = Field(default=None, env="DB_ECHO")
 
 #     @field_validator("port")
 #     def validate_db_port(cls, v) -> int:
@@ -303,9 +181,3 @@ class SSHSettings(BaseSettings):
 #         session_pool: so.sessionmaker[so.Session] = so.sessionmaker(bind=engine)
 
 #         return session_pool
-
-
-# settings: AppSettings = AppSettings()
-## Uncomment if you're configuring a database for the app
-# db_settings: DBSettings = DBSettings()
-# ssh_settings: SSHSettings = SSHSettings()
