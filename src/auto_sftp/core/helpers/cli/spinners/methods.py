@@ -1,11 +1,11 @@
-import typing as t
-from contextlib import contextmanager
+from __future__ import annotations
 
-from rich.console import Console
-from rich.spinner import Spinner
+from contextlib import contextmanager
+import typing as t
 
 from loguru import logger as log
-
+from rich.console import Console
+from rich.spinner import Spinner
 
 @contextmanager
 def get_console() -> t.Generator[Console, t.Any, None]:

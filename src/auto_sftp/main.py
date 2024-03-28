@@ -15,7 +15,6 @@ from paramiko.channel import ChannelFile, ChannelStderrFile, ChannelStdinFile
 from red_utils.ext.loguru_utils import init_logger, sinks
 from red_utils.std import path_utils
 
-
 def run_backup(ssh_settings: t.Union[SSHSettings, dict] = None):
     assert ssh_settings, ValueError("Missing ssh_settings")
     assert isinstance(ssh_settings, SSHSettings) or isinstance(

@@ -11,7 +11,6 @@ from core.helpers import get_host_os
 from loguru import logger as log
 import paramiko
 
-
 @contextmanager
 def get_ssh_client(
     ssh_settings: SSHSettings = ssh_settings,

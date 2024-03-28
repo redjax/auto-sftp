@@ -5,10 +5,8 @@ from pathlib import Path
 import typing as t
 
 from core import helpers
-
 from loguru import logger as log
 import paramiko
-
 
 class SSHManager(AbstractContextManager):
     def __init__(
