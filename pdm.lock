@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:29e3665fd96413d1c2ea4c0209ab546224538e1fcd7426046dbb9db776fa0fe2"
+content_hash = "sha256:94dac53fae67bed64a250d017af8b5bc3c72ca146f2ef9ccfcceaf342ee8c92c"
 
 [[package]]
 name = "annotated-types"
@@ -639,6 +639,16 @@ files = [
     {file = "pendulum-3.0.0-pp39-pypy39_pp73-musllinux_1_1_x86_64.whl", hash = "sha256:1a3604e9fbc06b788041b2a8b78f75c243021e0f512447806a6d37ee5214905d"},
     {file = "pendulum-3.0.0-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:92c307ae7accebd06cbae4729f0ba9fa724df5f7d91a0964b1b972a22baa482b"},
     {file = "pendulum-3.0.0.tar.gz", hash = "sha256:5d034998dea404ec31fae27af6b22cff1708f830a1ed7353be4d1019bb9f584e"},
+]
+
+[[package]]
+name = "pex"
+version = "2.0.3"
+summary = "The PEX packaging toolchain."
+groups = ["dev"]
+files = [
+    {file = "pex-2.0.3-py2.py3-none-any.whl", hash = "sha256:4ca62e27fd30cd1d4acbcdadfc52739c6e73c9292613d98cb35d88065174fa63"},
+    {file = "pex-2.0.3.tar.gz", hash = "sha256:a8a35e7eb212616b2964d70d8a134d41d16649c943ab206b90c749c005e60999"},
 ]
 
 [[package]]

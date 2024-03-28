@@ -28,9 +28,17 @@ build-backend = "pdm.backend"
 distribution = true
 
 [tool.pdm.dev-dependencies]
-dev = ["black>=24.3.0", "ruff>=0.3.4", "pytest-xdist>=3.5.0", "nox>=2024.3.2"]
+dev = [
+    "black>=24.3.0",
+    "ruff>=0.3.4",
+    "pytest-xdist>=3.5.0",
+    "nox>=2024.3.2",
+    "pex>=2.0.3",
+]
 
 [tool.pdm.scripts]
 
 start = { cmd = "python src/auto_sftp", env = { "ENV_FOR_DYNACONF" = "prod" } }
 start-dev = { cmd = "python src/auto_sftp", env = { "ENV_FOR_DYNACONF" = "dev" } }
+
+build-pex = { cmd = "pex . -o dist/auto-sftp.pex -m main.main" }
