@@ -40,8 +40,9 @@ if __name__ == "__main__":
         ]
     )
 
+    log.info(f">> Start Backup")
     log.info(
-        f""">> Start Backup
+        f"""Remote Host Details:
 Remote Host: {ssh_settings.remote_host}:{ssh_settings.remote_port}
 Remote User: {ssh_settings.remote_user}
 Remote CWD: {ssh_settings.remote_cwd}
