@@ -15,6 +15,9 @@ from paramiko.channel import ChannelFile, ChannelStderrFile, ChannelStdinFile
 from red_utils.ext.loguru_utils import init_logger, sinks
 from red_utils.std import path_utils
 
+from packages import cleanup
+
+
 def run_backup(ssh_settings: t.Union[SSHSettings, dict] = None):
     assert ssh_settings, ValueError("Missing ssh_settings")
     assert isinstance(ssh_settings, SSHSettings) or isinstance(
@@ -53,7 +56,21 @@ def run_backup(ssh_settings: t.Union[SSHSettings, dict] = None):
 
 
 def main(ssh_settings: SSHSettings = ssh_settings):
-    run_backup(ssh_settings=ssh_settings)
+    try:
+        run_backup(ssh_settings=ssh_settings)
+    except Exception as exc:
+        msg = Exception(f"Unhandled exception running backup. Details: {exc}")
+        log.error(msg)
+
+        raise exc
+
+    try:
+        cleanup.local.run_local_cleanup()
+    except Exception as exc:
+        msg = Exception(f"Unhandled exception running local cleanup. Details: {exc}")
+        log.error(msg)
+
+        raise exc
 
 
 if __name__ == "__main__":

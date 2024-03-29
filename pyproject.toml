@@ -39,6 +39,8 @@ dev = [
 
 [tool.pdm.scripts]
 
+activate = { shell = "pdm use --venv in-project" }
+
 start = { cmd = "python src/auto_sftp", env = { "ENV_FOR_DYNACONF" = "prod" } }
 start-dev = { cmd = "python src/auto_sftp", env = { "ENV_FOR_DYNACONF" = "dev" } }
 
