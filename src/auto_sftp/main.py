@@ -16,6 +16,7 @@ from red_utils.ext.loguru_utils import init_logger, sinks
 from red_utils.std import path_utils
 
 from packages import cleanup
+import pendulum
 
 
 def run_backup(ssh_settings: t.Union[SSHSettings, dict] = None):
@@ -41,13 +42,22 @@ def run_backup(ssh_settings: t.Union[SSHSettings, dict] = None):
         _local_backup_path = Path(
             f"{ssh_settings.local_dest}{ssh_settings.extra_path_suffix}"
         )
+        log.debug(f"_remote_dir: {_remote_dir}")
+        log.debug(f"_local_backup_path: {_local_backup_path}")
 
-        sftp_backup.run_sftp_backup(
-            ssh_settings=ssh_settings,
-            remote_dir=f"{_remote_dir}".replace("\\", "/"),
-            local_backup_path=f"{_local_backup_path}".replace("\\", "/"),
-        )
-        log.success(f"Transferred backups to '{_local_backup_path}'")
+        log.info("Starting SFTP backup")
+        try:
+            sftp_backup.run_sftp_backup(
+                ssh_settings=ssh_settings,
+                remote_dir=f"{_remote_dir}".replace("\\", "/"),
+                local_backup_path=f"{_local_backup_path}".replace("\\", "/"),
+            )
+            log.success(f"Transferred backups to '{_local_backup_path}'")
+        except Exception as exc:
+            msg = Exception(f"Unhandled exception running sftp backup. Details: {exc}")
+            log.error(msg)
+
+            raise
     except Exception as exc:
         msg = Exception(f"Unhandled exception running SFTP backup. Details: {exc}")
         log.error(msg)
@@ -55,7 +65,7 @@ def run_backup(ssh_settings: t.Union[SSHSettings, dict] = None):
         raise exc
 
 
-def main(ssh_settings: SSHSettings = ssh_settings):
+def main(ssh_settings: SSHSettings = ssh_settings, cleanup_threshold: int = 10):
     try:
         run_backup(ssh_settings=ssh_settings)
     except Exception as exc:
@@ -65,7 +75,7 @@ def main(ssh_settings: SSHSettings = ssh_settings):
         raise exc
 
     try:
-        cleanup.local.run_local_cleanup()
+        cleanup.local.run_local_cleanup(threshold=cleanup_threshold)
     except Exception as exc:
         msg = Exception(f"Unhandled exception running local cleanup. Details: {exc}")
         log.error(msg)
@@ -95,4 +105,4 @@ if __name__ == "__main__":
         f"Local destination [exists:{ssh_settings.local_dest_exists}]: {ssh_settings.local_dest}"
     )
 
-    main()
+    main(cleanup_threshold=60)

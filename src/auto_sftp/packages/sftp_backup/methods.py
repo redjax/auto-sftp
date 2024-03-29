@@ -6,7 +6,9 @@ import typing as t
 from core import SSHSettings, ssh_settings
 from loguru import logger as log
 from modules import ssh_mod
-import paramiko
+
+from .helpers import _str
+
 
 def run_sftp_backup(
     ssh_settings: SSHSettings = None,
@@ -40,6 +42,9 @@ def run_sftp_backup(
         else:
             local_backup_path: Path = Path(local_backup_path)
 
+    y_m_str = _str.get_year_month_str()
+    remote_dir: str = f"{remote_dir}/{y_m_str}"
+
     try:
         with ssh_mod.SSHManager(
             host=ssh_settings.remote_host,
@@ -63,9 +68,6 @@ def run_sftp_backup(
 
                 raise exc
 
-            log.debug(
-                f"Downloading [{len(files)}] file(s) from remote path '{remote_dir}' to local destination '{local_backup_path}'"
-            )
             try:
                 ssh_manager.sftp_download_all(
                     remote_src=remote_dir,

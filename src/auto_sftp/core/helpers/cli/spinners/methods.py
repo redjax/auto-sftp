@@ -7,6 +7,7 @@ from loguru import logger as log
 from rich.console import Console
 from rich.spinner import Spinner
 
+
 @contextmanager
 def get_console() -> t.Generator[Console, t.Any, None]:
     try:
@@ -17,7 +18,7 @@ def get_console() -> t.Generator[Console, t.Any, None]:
         msg = Exception(f"Unhandled exception getting rich Console. Details: {exc}")
         log.error(msg)
 
-        raise exc
+        raise
 
 
 @contextmanager
@@ -40,7 +41,7 @@ def simple_spinner(text: str = "Processing...", animation: str = "dots") -> None
         msg = Exception(f"Unhandled exception getting console spinner. Details: {exc}")
         log.error(msg)
 
-        raise exc
+        raise
 
     ## Display spinner
     try:
@@ -53,4 +54,4 @@ def simple_spinner(text: str = "Processing...", animation: str = "dots") -> None
         )
         log.error(msg)
 
-        pass
+        raise

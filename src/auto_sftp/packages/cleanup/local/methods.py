@@ -110,7 +110,8 @@ def get_file_dicts(files: list[Path] = None) -> list[dict]:
                 "modified_at": pendulum.from_timestamp(f.stat().st_mtime),
                 "size_in_bytes": f.stat().st_size,
             }
-            log.debug(f"File dict: {f_dict}")
+
+            # log.debug(f"File dict: {f_dict}")
             if f not in _dicts:
                 _dicts.append(f_dict)
             else:
@@ -128,11 +129,20 @@ def get_file_dicts(files: list[Path] = None) -> list[dict]:
 
 
 def delete_oldest(files: list[File] = None, threshold: int = 3):
+    assert files, ValueError("Missing list of files")
+    assert isinstance(files, list), TypeError(
+        f"files must be a list of File objects. Got type: ({type(files)})"
+    )
+
     sorted_files: list[File] = sorted(files, key=lambda x: x.path.stat().st_ctime)
-
     delete_count: list[File] = max(0, len(sorted_files) - threshold)
-
     _deleted: list[File] = []
+
+    if not len(files) > threshold:
+        log.warning(
+            f"Number of files [{len(files)}] is less than the threshold of [{threshold}]. Skipping deletions."
+        )
+        return
 
     for f in range(delete_count):
 
@@ -202,12 +212,12 @@ def run_local_cleanup(
 
     if _continue:
         for f in f_dicts:
-            log.debug(f"File dict: {f}")
+            # log.debug(f"File dict: {f}")
 
             try:
                 _file = File.model_validate(f)
-                log.debug(f"File: {_file}")
-                log.debug(f"Test: {_file.model_dump_json()}")
+                # log.debug(f"File: {_file}")
+                # log.debug(f"Test: {_file.model_dump_json()}")
 
                 _files.append(_file)
             except Exception as exc:
@@ -218,7 +228,7 @@ def run_local_cleanup(
 
                 continue
 
-    log.info(f"Deleting oldest backups. Threshold: {threshold}")
+    # log.info(f"Deleting oldest backups. Threshold: {threshold}")
     try:
         _deleted: list[File] = delete_oldest(files=_files, threshold=threshold)
     except Exception as exc:
