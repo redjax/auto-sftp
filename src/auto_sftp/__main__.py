@@ -10,7 +10,7 @@ from loguru import logger as log
 from red_utils.ext.loguru_utils import init_logger, sinks
 
 
-def main(cleanup_threshold: int = 10):
+def main(cleanup_threshold: int = 14):
     try:
         run_backup(ssh_settings=ssh_settings)
     except Exception as exc:
@@ -50,4 +50,4 @@ Remote CWD: {ssh_settings.remote_cwd}
 """
     )
 
-    main(cleanup_threshold=60)
+    main(cleanup_threshold=ssh_settings.local_backup_limit)

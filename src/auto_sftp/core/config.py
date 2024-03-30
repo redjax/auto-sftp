@@ -41,6 +41,9 @@ class SSHSettings(BaseSettings):
         default="~/.ssh/id_rsa.pub", env="SSH_PUBKEY_FILE"
     )
     extra_path_suffix: str | None = Field(default=None, env="SSH_EXTRA_PATH_SUFFIX")
+    
+    local_backup_limit: int = Field(default=None, env="SSH_LOCAL_BACKUP_LIMIT")
+    remote_backup_limit: int = Field(default=None, env="SSH_REMOTE_BACKUP_LIMIT")
 
     @field_validator("privkey")
     def validate_privkey(cls, v) -> Path:

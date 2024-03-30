@@ -45,6 +45,7 @@ settings: AppSettings = AppSettings(
     log_level=DYNACONF_SETTINGS.LOG_LEVEL,
     logs_dir=DYNACONF_SETTINGS.LOGS_DIR,
 )
+
 ssh_settings: SSHSettings = SSHSettings(
     remote_host=DYNACONF_SSH_SETTINGS.SSH_REMOTE_HOST,
     remote_port=DYNACONF_SSH_SETTINGS.SSH_REMOTE_PORT,
@@ -55,4 +56,6 @@ ssh_settings: SSHSettings = SSHSettings(
     extra_path_suffix=DYNACONF_SSH_SETTINGS.SSH_EXTRA_PATH_SUFFIX,
     privkey=DYNACONF_SSH_SETTINGS.SSH_PRIVKEY_FILE,
     pubkey=DYNACONF_SSH_SETTINGS.SSH_PUBKEY_FILE,
+    local_backup_limit=DYNACONF_SSH_SETTINGS.SSH_LOCAL_BACKUP_LIMIT,
+    remote_backup_limit=DYNACONF_SSH_SETTINGS.SSH_REMOTE_BACKUP_LIMIT,
 )
