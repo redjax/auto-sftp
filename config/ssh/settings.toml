@@ -10,6 +10,11 @@ ssh_local_dest_path = ""
 ## Appended to the end of local & remote paths
 ssh_extra_path_suffix = ""
 
+## 1 month
+ssh_local_backup_limit = 120
+## 6 months
+ssh_remote_backup_limit = 720
+
 [dev]
 
 ssh_remote_host = ""
@@ -18,6 +23,11 @@ ssh_remote_port = 22
 ssh_remote_cwd = ""
 
 ssh_local_dest_path = ""
+
+## 1 month
+ssh_local_backup_limit = 120
+## 6 months
+ssh_remote_backup_limit = 720
 
 ## Appended to the end of local & remote paths
 ssh_extra_path_suffix = ""
@@ -33,3 +43,8 @@ ssh_local_dest_path = ""
 
 ## Appended to the end of local & remote paths
 ssh_extra_path_suffix = ""
+
+## 1 month
+ssh_local_backup_limit = 120
+## 6 months
+ssh_remote_backup_limit = 720

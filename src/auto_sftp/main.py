@@ -105,4 +105,4 @@ if __name__ == "__main__":
         f"Local destination [exists:{ssh_settings.local_dest_exists}]: {ssh_settings.local_dest}"
     )
 
-    main(cleanup_threshold=60)
+    main(cleanup_threshold=ssh_settings.local_backup_limit)
