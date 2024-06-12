@@ -45,6 +45,20 @@ def run_backup(ssh_settings: t.Union[SSHSettings, dict] = None):
         log.debug(f"_remote_dir: {_remote_dir}")
         log.debug(f"_local_backup_path: {_local_backup_path}")
 
+        if not _local_backup_path.exists():
+            log.warning(
+                f"Local backup path '{_local_backup_path}' does not exist. Creating now."
+            )
+            try:
+                _local_backup_path.mkdir(exist_ok=True, parents=True)
+            except Exception as exc:
+                msg = Exception(
+                    f"Unhandled exception creating path '{_local_backup_path}'. Details: {exc}"
+                )
+                log.error(msg)
+
+                raise exc
+
         log.info("Starting SFTP backup")
         try:
             sftp_backup.run_sftp_backup(
