@@ -46,10 +46,25 @@ def _pre_sort_files(files: list[Path] = None):
 
     for _file in files:
         filename_dt = extract_dt_from_filename(filename=_file)
-        _pair = {"filename": _file.name, "src_path": _file.parent, "dt": filename_dt}
+        dest_path = _append_local_dest(dt=filename_dt, src_filename=_file.name)
+
+        _pair = {
+            "filename": _file.name,
+            "src_path": _file.parent,
+            "dest_path": dest_path,
+            "dt": filename_dt,
+        }
         filename_dt_pairs.append(_pair)
 
     return filename_dt_pairs
+
+
+def _append_local_dest(dt: pendulum.DateTime = None, src_filename: str = None):
+    dir_path = Path(
+        f"{ssh_settings.local_dest}/{dt.year}/{dt.month}/{dt.day}/{src_filename}"
+    )
+
+    return dir_path
 
 
 def sort_into_date_dirs(
