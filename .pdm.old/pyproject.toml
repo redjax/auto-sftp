@@ -1,0 +1,47 @@
+[project]
+name = "auto-sftp"
+version = "0.1.0"
+description = "Automate SFTP pulls with Paramiko."
+authors = [{ name = "redjax", email = "none@none.com" }]
+dependencies = [
+    "pydantic>=2.6.4",
+    "duckdb>=0.10.1",
+    "pandas>=2.2.1",
+    "pydantic-settings>=2.2.1",
+    "dynaconf>=3.2.5",
+    "pendulum>=3.0.0",
+    "paramiko>=3.4.0",
+    "red-utils>=0.2.18",
+    "loguru>=0.7.2",
+    "scp>=0.14.5",
+    "rich>=13.7.1",
+]
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "MIT" }
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "black>=24.3.0",
+    "ruff>=0.3.4",
+    "pytest-xdist>=3.5.0",
+    "nox>=2024.3.2",
+    "pex>=2.0.3",
+]
+
+[tool.pdm.scripts]
+
+activate = { shell = "pdm use --venv in-project" }
+
+start = { cmd = "python src/auto_sftp", env = { "ENV_FOR_DYNACONF" = "prod" } }
+start-dev = { cmd = "python src/auto_sftp", env = { "ENV_FOR_DYNACONF" = "dev" } }
+
+build-pex = { cmd = "pex . -o dist/auto-sftp.pex -m main.main" }
