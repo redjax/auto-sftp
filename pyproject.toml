@@ -4,4 +4,24 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "duckdb>=1.2.0",
+    "dynaconf>=3.2.10",
+    "loguru>=0.7.3",
+    "pandas>=2.2.3",
+    "paramiko>=3.5.1",
+    "pendulum>=3.0.0",
+    "pydantic>=2.10.6",
+    "pydantic-settings>=2.8.1",
+    "red-utils>=0.2.25",
+    "rich>=13.9.4",
+    "scp>=0.15.0",
+]
+
+[dependency-groups]
+dev = [
+    "nox>=2025.2.9",
+    "pex>=2.33.2",
+    "pytest-xdist>=3.6.1",
+    "ruff>=0.9.9",
+]
