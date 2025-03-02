@@ -11,7 +11,7 @@ cffi==1.16.0
 click==8.1.7
 colorama==0.4.6; sys_platform == "win32" or platform_system == "Windows"
 colorlog==6.8.2
-cryptography==42.0.5
+cryptography==44.0.1
 diskcache==5.6.3
 distlib==0.3.8
 duckdb==0.10.1
