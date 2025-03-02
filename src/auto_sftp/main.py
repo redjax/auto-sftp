@@ -83,7 +83,7 @@ def main(ssh_settings: SSHSettings = ssh_settings, cleanup_threshold: int = 10):
     try:
         run_backup(ssh_settings=ssh_settings)
     except Exception as exc:
-        msg = Exception(f"Unhandled exception running backup. Details: {exc}")
+        msg = Exception(f"({type(exc)}) Unhandled exception running backup. Details: {exc}")
         log.error(msg)
 
         raise exc

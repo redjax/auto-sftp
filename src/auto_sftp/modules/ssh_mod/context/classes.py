@@ -111,30 +111,38 @@ class SSHManager(AbstractContextManager):
         )
 
         log.info(f"Listing files in '{remote_path}' on {self.host}")
-        with helpers.simple_spinner(
-            text=f"({self.user}@{self.host}) Listing files in '{remote_path}'...\n"
-        ):
-            try:
-                sftp: paramiko.SFTPClient = self.get_sftp_client()
-            except Exception as exc:
-                msg = Exception(
-                    f"Unhandled exception getting SFTP client while listing files. Details: {exc}"
-                )
-                log.error(msg)
+        try:
+            with helpers.simple_spinner(
+                text=f"({self.user}@{self.host}) Listing files in '{remote_path}'...\n"
+            ):
+                try:
+                    sftp: paramiko.SFTPClient = self.get_sftp_client()
+                except Exception as exc:
+                    msg = Exception(
+                        f"Unhandled exception getting SFTP client while listing files. Details: {exc}"
+                    )
+                    log.error(msg)
 
-                raise exc
+                    raise exc
 
-            try:
-                _files: list[str] = sftp.listdir(path=remote_path)
+                try:
+                    _files: list[str] = sftp.listdir(path=remote_path)
 
-                return _files
-            except Exception as exc:
-                msg = Exception(
-                    f"Unhandled exception listing files in remote path '{remote_path}'. Details: {exc}"
-                )
-                log.error(msg)
+                    return _files
+                except Exception as exc:
+                    msg = Exception(
+                        f"Unhandled exception listing files in remote path '{remote_path}'. Details: {exc}"
+                    )
+                    log.error(msg)
 
-                raise exc
+                    raise exc
+        except Exception as exc:
+            msg = Exception(
+                f"({type(exc)}) Unhandled exception listing files in remote path '{remote_path}'. Details: {exc}"
+            )
+            log.error(msg)
+
+            raise exc
 
     def _sftp_walk(self, sftp_client: paramiko.SFTPClient, remotepath: str):
         files_to_download = []
