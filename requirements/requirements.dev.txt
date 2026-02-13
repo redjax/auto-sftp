@@ -17,7 +17,7 @@ distlib==0.3.8
 duckdb==0.10.1
 dynaconf==3.2.5
 execnet==2.0.2
-filelock==3.13.3
+filelock==3.20.3
 h11==0.14.0
 httpcore==1.0.4
 httpx==0.27.0
